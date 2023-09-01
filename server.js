@@ -60,7 +60,6 @@ try {
         likeDoc = new Like({ count: 0 });
       }
   
-
       likeDoc.count++;
       await likeDoc.save();
 
