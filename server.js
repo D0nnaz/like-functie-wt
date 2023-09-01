@@ -15,6 +15,7 @@ const io = socketIO(server);
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 60000,
 });
 
 app.use(express.static("static"));
@@ -37,17 +38,18 @@ app.get("/", async (req, res) => {
 
 io.on("connection", (socket) => {
   socket.on("getLikeCount", async () => {
-    try {
-      let likeDoc = await Like.findOne();
+try {
+  let likeDoc = await Like.findOne();
 
-      if (!likeDoc) {
-        likeDoc = new Like({ count: 0 });
-      }
+  if (!likeDoc) {
+    likeDoc = new Like({ count: 0 });
+  }
 
-      socket.emit("updateLikes", { likeCount: likeDoc.count });
-    } catch (error) {
-      console.error("Error getting like count:", error);
-    }
+  socket.emit("updateLikes", { likeCount: likeDoc.count });
+} catch (error) {
+  console.error("Error getting like count:", error);
+}
+
   });
 
   socket.on("incrementLike", async () => {
@@ -57,6 +59,7 @@ io.on("connection", (socket) => {
       if (!likeDoc) {
         likeDoc = new Like({ count: 0 });
       }
+  
 
       likeDoc.count++;
       await likeDoc.save();
