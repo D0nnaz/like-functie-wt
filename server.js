@@ -15,6 +15,7 @@ const io = socketIO(server);
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 60000,
 });
 
 app.use(express.static("static"));
@@ -25,44 +26,41 @@ app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", "./views");
 
+app.get("/", async (req, res) => {
+  const likeDoc = await Like.findOne();
+  const likeCount = likeDoc ? likeDoc.count : 0;
 
-for (let i = 1; i <= 30; i++) {
-  app.get(`/${i}`, async (req, res) => {
-    const likeDoc = await Like.findOne({ page: i });
-    const likeCount = likeDoc ? likeDoc.count : 0;
-
-    res.render("index", {
-      liked: false,
-      likeCount,
-    });
+  res.render("index", {
+    liked: false,
+    likeCount,
   });
-}
+});
 
 io.on("connection", (socket) => {
-  socket.on("getLikeCount", async (page) => {
-    try {
-      const likeDoc = await Like.findOne({ page });
+  socket.on("getLikeCount", async () => {
+try {
+  let likeDoc = await Like.findOne();
 
-      if (!likeDoc) {
-        socket.emit("updateLikes", { likeCount: 0 });
-      } else {
-        socket.emit("updateLikes", { likeCount: likeDoc.count });
-      }
-    } catch (error) {
-      console.error("Error getting like count:", error);
-    }
+  if (!likeDoc) {
+    likeDoc = new Like({ count: 0 });
+  }
+
+  socket.emit("updateLikes", { likeCount: likeDoc.count });
+} catch (error) {
+  console.error("Error getting like count:", error);
+}
+
   });
 
-  socket.on("incrementLike", async (page) => { 
+  socket.on("incrementLike", async () => {
     try {
-      let likeDoc = await Like.findOne({ page });
+      let likeDoc = await Like.findOne();
 
       if (!likeDoc) {
-        likeDoc = new Like({ page, count: 1 });
-      } else {
-        likeDoc.count++;
+        likeDoc = new Like({ count: 0 });
       }
-
+  
+      likeDoc.count++;
       await likeDoc.save();
 
       io.emit("updateLikes", { likeCount: likeDoc.count });
@@ -71,29 +69,23 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("decrementLike", async (page) => { 
+  socket.on("decrementLike", async () => {
     try {
-      let likeDoc = await Like.findOne({ page });
+      let likeDoc = await Like.findOne();
 
       if (!likeDoc) {
-        socket.emit("updateLikes", { likeCount: 0 });
-      } else {
-        likeDoc.count--;
-
-        if (likeDoc.count < 0) {
-          likeDoc.count = 0;
-        }
-
-        await likeDoc.save();
-
-        io.emit("updateLikes", { likeCount: likeDoc.count });
+        likeDoc = new Like({ count: 0 });
       }
+
+      likeDoc.count--;
+      await likeDoc.save();
+
+      io.emit("updateLikes", { likeCount: likeDoc.count });
     } catch (error) {
       console.error("Error decrementing like:", error);
     }
   });
 });
-
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
