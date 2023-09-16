@@ -15,7 +15,6 @@ const io = socketIO(server);
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 60000,
 });
 
 app.use(express.static("static"));
@@ -26,41 +25,44 @@ app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", "./views");
 
-app.get("/", async (req, res) => {
-  const likeDoc = await Like.findOne();
-  const likeCount = likeDoc ? likeDoc.count : 0;
 
-  res.render("index", {
-    liked: false,
-    likeCount,
+for (let i = 1; i <= 30; i++) {
+  app.get(`/${i}`, async (req, res) => {
+    const likeDoc = await Like.findOne({ page: i });
+    const likeCount = likeDoc ? likeDoc.count : 0;
+
+    res.render("index", {
+      liked: false,
+      likeCount,
+    });
   });
-});
-
-io.on("connection", (socket) => {
-  socket.on("getLikeCount", async () => {
-try {
-  let likeDoc = await Like.findOne();
-
-  if (!likeDoc) {
-    likeDoc = new Like({ count: 0 });
-  }
-
-  socket.emit("updateLikes", { likeCount: likeDoc.count });
-} catch (error) {
-  console.error("Error getting like count:", error);
 }
 
-  });
-
-  socket.on("incrementLike", async () => {
+io.on("connection", (socket) => {
+  socket.on("getLikeCount", async (page) => {
     try {
-      let likeDoc = await Like.findOne();
+      const likeDoc = await Like.findOne({ page });
 
       if (!likeDoc) {
-        likeDoc = new Like({ count: 0 });
+        socket.emit("updateLikes", { likeCount: 0 });
+      } else {
+        socket.emit("updateLikes", { likeCount: likeDoc.count });
       }
-  
-      likeDoc.count++;
+    } catch (error) {
+      console.error("Error getting like count:", error);
+    }
+  });
+
+  socket.on("incrementLike", async (page) => { 
+    try {
+      let likeDoc = await Like.findOne({ page });
+
+      if (!likeDoc) {
+        likeDoc = new Like({ page, count: 1 });
+      } else {
+        likeDoc.count++;
+      }
+
       await likeDoc.save();
 
       io.emit("updateLikes", { likeCount: likeDoc.count });
@@ -69,23 +71,29 @@ try {
     }
   });
 
-  socket.on("decrementLike", async () => {
+  socket.on("decrementLike", async (page) => { 
     try {
-      let likeDoc = await Like.findOne();
+      let likeDoc = await Like.findOne({ page });
 
       if (!likeDoc) {
-        likeDoc = new Like({ count: 0 });
+        socket.emit("updateLikes", { likeCount: 0 });
+      } else {
+        likeDoc.count--;
+
+        if (likeDoc.count < 0) {
+          likeDoc.count = 0;
+        }
+
+        await likeDoc.save();
+
+        io.emit("updateLikes", { likeCount: likeDoc.count });
       }
-
-      likeDoc.count--;
-      await likeDoc.save();
-
-      io.emit("updateLikes", { likeCount: likeDoc.count });
     } catch (error) {
       console.error("Error decrementing like:", error);
     }
   });
 });
+
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {

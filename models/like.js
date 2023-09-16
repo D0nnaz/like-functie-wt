@@ -1,9 +1,5 @@
 const mongoose = require("mongoose");
 
-const likeSchema = new mongoose.Schema({
-  count: Number,
-});
-
-const Like = mongoose.model("Like", likeSchema);
+const Like = mongoose.model("Like", { count: Number, page: Number });
 
 module.exports = Like;
