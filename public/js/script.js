@@ -32,7 +32,7 @@ updateButtonState();
 
 function setLikeContainerScale() {
   var screenWidth = window.innerWidth;
-  var scaleFactor = 1;
+  var scaleFactor = 0.75;
 
   if (screenWidth < 200) {
     scaleFactor = 0.2;
@@ -44,7 +44,7 @@ function setLikeContainerScale() {
   } else if (screenWidth < 600) {
     scaleFactor = 0.7;
   }
-
+  
   var likeContainer = document.querySelector(".like-container");
   likeContainer.style.transform = "scale(" + scaleFactor + ")";
 }
