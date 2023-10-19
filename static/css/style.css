@@ -1,8 +1,5 @@
-/* Voeg deze code toe aan je eigen CSS-bestand */
-/* Inclusief Work Sans Regular (400) en Work Sans Bold (700) */
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap');
 
-/* Gebruik het lettertype in je stijlregels */
 * {
     font-family: 'Work Sans', sans-serif;
     font-weight: 300;
@@ -15,7 +12,6 @@ html {
     padding: 0;
     margin: 0;
     font-family: "SanofiSans-Regular", sans-serif;
-    /* background-color: #FAF1E4; */
 }
 
 body {
@@ -26,14 +22,15 @@ body {
 
 .like-container {
     height: 2em;
-    width: auto;
-    min-width: 35em;
+    width: 80%;
+    min-width: 24em;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 20px;
     background-color: #7b00e6;
     border-radius: 20px;
+    scale: none;
 }
 
 h2 {
@@ -87,4 +84,10 @@ h2 {
 
 #text {
     font-size: 1px;
+}
+
+@media (max-width: 600px) {
+    .like-container {
+        scale: 0.5;
+    }
 }
