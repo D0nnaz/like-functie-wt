@@ -30,10 +30,24 @@ socket.emit("getLikeCount", page);
 
 updateButtonState();
 
-window.addEventListener("resize", () => {
-  const currentWidth = window.innerWidth;
-  const maxWidth = 600;
-  const scaleFactor = currentWidth <= maxWidth ? currentWidth / maxWidth : 1;
+function setLikeContainerScale() {
+  var screenWidth = window.innerWidth;
+  var scaleFactor = 1;
 
-  likeButton.style.transform = `scale(${scaleFactor})`;
-});
+  if (screenWidth < 200) {
+    scaleFactor = 0.2;
+  }
+  else if (screenWidth < 300) {
+    scaleFactor = 0.3;
+  } else if (screenWidth < 400) {
+    scaleFactor = 0.5;
+  } else if (screenWidth < 600) {
+    scaleFactor = 0.7;
+  }
+
+  var likeContainer = document.querySelector(".like-container");
+  likeContainer.style.transform = "scale(" + scaleFactor + ")";
+}
+
+window.addEventListener("load", setLikeContainerScale);
+window.addEventListener("resize", setLikeContainerScale);
