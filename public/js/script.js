@@ -42,7 +42,7 @@ function setLikeContainerScale() {
   } else if (screenWidth < 400) {
     scaleFactor = 0.5;
   } else if (screenWidth < 600) {
-    scaleFactor = 0.8;
+    scaleFactor = 0.7;
   }
 
   var likeContainer = document.querySelector(".like-container");
