@@ -32,7 +32,7 @@ body {
     background-color: #7b00e6;
     border-radius: 20px;
     transform-origin: top left;
-    transform: scale(0.75); /* Standaardschaal van 1 */
+    transform: scale(0.75) !important; /* Standaardschaal van 1 */
     transition: transform 0.3s; /* Voeg een overgang toe voor een vloeiende schaalverandering */
 }
 
