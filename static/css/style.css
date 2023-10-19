@@ -22,15 +22,18 @@ body {
 
 .like-container {
     height: 2em;
-    width: 80%;
-    min-width: 24em;
+    max-width: 40em; /* Maximale breedte in em */
+    min-width: 24em; /* Minimale breedte in em */
+    width: 100%; /* Neem de volledige beschikbare breedte in */
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 20px;
     background-color: #7b00e6;
     border-radius: 20px;
-    scale: none;
+    transform-origin: top left;
+    transform: scale(1); /* Standaardschaal van 1 */
+    transition: transform 0.3s; /* Voeg een overgang toe voor een vloeiende schaalverandering */
 }
 
 h2 {
@@ -81,25 +84,6 @@ h2 {
     background: rgba(72, 50, 133, 1) !important;
 }
 
-
 #text {
     font-size: 1px;
-}
-
-@media (max-width: 600px) {
-    .like-container {
-        scale: 0.5;
-    }
-}
-
-@media (max-width: 300px) {
-    .like-container {
-        scale: 0.3;
-    }
-}
-
-@media (max-width: 100px) {
-    .like-container {
-        scale: 0.1;
-    }
 }

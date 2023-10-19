@@ -26,8 +26,14 @@ socket.on("updateLikes", (data) => {
   document.getElementById("like-count").textContent = data.likeCount;
 });
 
-socket.emit("getLikeCount", page); 
+socket.emit("getLikeCount", page);
 
 updateButtonState();
 
+window.addEventListener("resize", () => {
+  const currentWidth = window.innerWidth;
+  const maxWidth = 600;
+  const scaleFactor = currentWidth <= maxWidth ? currentWidth / maxWidth : 1;
 
+  likeButton.style.transform = `scale(${scaleFactor})`;
+});
