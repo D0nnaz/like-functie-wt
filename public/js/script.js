@@ -35,16 +35,13 @@ function setLikeContainerScale() {
   var scaleFactor = 1;
 
   if (screenWidth < 200) {
-    scaleFactor = 0.2;
+    scaleFactor = 0.25;
   }
   else if (screenWidth < 300) {
-    scaleFactor = 0.3;
+    scaleFactor = 0.45;
   } else if (screenWidth < 400) {
-    scaleFactor = 0.5;
-  } else if (screenWidth < 600) {
-    scaleFactor = 0.7;
+    scaleFactor = 0.6;
   }
-
   var likeContainer = document.querySelector(".like-container");
   likeContainer.style.transform = "scale(" + scaleFactor + ")";
 }
