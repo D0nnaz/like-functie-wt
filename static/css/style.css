@@ -91,3 +91,15 @@ h2 {
         scale: 0.5;
     }
 }
+
+@media (max-width: 300px) {
+    .like-container {
+        scale: 0.3;
+    }
+}
+
+@media (max-width: 100px) {
+    .like-container {
+        scale: 0.1;
+    }
+}
