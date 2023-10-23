@@ -35,9 +35,6 @@ function setLikeContainerScale() {
   var scaleFactor = 0.75;
 
   if (screenWidth < 75) {
-    scaleFactor = 0.2;
-  }
-  else if (screenWidth < 100) {
     scaleFactor = 0.3;
   }
   else if (screenWidth < 300) {
