@@ -34,11 +34,14 @@ function setLikeContainerScale() {
   var screenWidth = window.innerWidth;
   var scaleFactor = 0.75;
 
-  if (screenWidth < 200) {
+  if (screenWidth < 75) {
     scaleFactor = 0.2;
   }
-  else if (screenWidth < 300) {
+  else if (screenWidth < 100) {
     scaleFactor = 0.3;
+  }
+  else if (screenWidth < 300) {
+    scaleFactor = 0.4;
   } else if (screenWidth < 400) {
     scaleFactor = 0.5;
   } else if (screenWidth < 600) {
