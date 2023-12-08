@@ -25,15 +25,30 @@ app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", "./views");
 
-
-for (let i = 1; i <= 30; i++) {
+// Handle index pages
+for (let i = 1; i <= 1000; i++) {
   app.get(`/${i}`, async (req, res) => {
-    const likeDoc = await Like.findOne({ page: i });
+    const likeDoc = await Like.findOne({ page: `${i}` });
     const likeCount = likeDoc ? likeDoc.count : 0;
 
     res.render("index", {
       liked: false,
       likeCount,
+      isCurrentPage: req.path === `/${i}`,
+    });
+  });
+}
+
+// Handle immunology pages
+for (let i = 1; i <= 1000; i++) {
+  app.get(`/immunology${i}`, async (req, res) => {
+    const likeDoc = await Like.findOne({ page: `immunology${i}` });
+    const likeCount = likeDoc ? likeDoc.count : 0;
+
+    res.render("immunology", {
+      liked: false,
+      likeCount,
+      isCurrentPage: req.path === `/immunology${i}`,
     });
   });
 }
@@ -53,7 +68,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("incrementLike", async (page) => { 
+  socket.on("incrementLike", async (page) => {
     try {
       let likeDoc = await Like.findOne({ page });
 
@@ -71,7 +86,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("decrementLike", async (page) => { 
+  socket.on("decrementLike", async (page) => {
     try {
       let likeDoc = await Like.findOne({ page });
 
@@ -93,7 +108,6 @@ io.on("connection", (socket) => {
     }
   });
 });
-
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {

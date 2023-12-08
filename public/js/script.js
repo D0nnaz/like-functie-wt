@@ -1,7 +1,8 @@
 console.log("JS is connected");
 const socket = io();
-let liked = localStorage.getItem("liked") === "true";
-let page = window.location.pathname.substring(1);
+const page = window.location.pathname.substring(1);
+const localStorageKey = `liked_${page}`;
+let liked = localStorage.getItem(localStorageKey) === "true";
 
 function updateButtonState() {
   const button = document.getElementById("like-button");
@@ -13,7 +14,7 @@ function updateButtonState() {
 document.getElementById("like-button").addEventListener("click", () => {
   liked = !liked;
   updateButtonState();
-  localStorage.setItem("liked", liked.toString());
+  localStorage.setItem(localStorageKey, liked.toString());
 
   if (liked) {
     socket.emit("incrementLike", page);
