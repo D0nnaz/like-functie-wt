@@ -17,15 +17,14 @@ html {
 body {
     display: flex;
     align-items: center
-
 }
 
 
 .like-container {
     height: 2em;
-    max-width: 40em; /* Maximale breedte in em */
-    min-width: 24em; /* Minimale breedte in em */
-    width: 100%; /* Neem de volledige beschikbare breedte in */
+    max-width: 40em;
+    min-width: 24em;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -34,7 +33,7 @@ body {
     border-radius: 20px;
     transform-origin: top left;
     transform: scale(0.75);
-    transition: transform 0.3s; /* Voeg een overgang toe voor een vloeiende schaalverandering */
+    transition: transform 0.3s;
 }
 
 h2 {
@@ -87,4 +86,21 @@ h2 {
 
 #text {
     font-size: 1px;
+}
+
+
+.immunology * {
+    font-family: "Lato", sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+}
+
+.immunology .like-container {
+    background-color: #00a880;
+    border-radius: 0px;
+}
+
+.immunology #like-button.liked:before,
+.immunology #like-button.liked:after {
+    background: #006652 !important;
 }

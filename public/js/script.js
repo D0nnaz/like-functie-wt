@@ -8,7 +8,7 @@ function updateButtonState() {
   const button = document.getElementById("like-button");
   button.className = liked ? "liked" : "";
   button.textContent = liked ? "Unlike" : "Like";
-  button.style.color = liked ? "#7b00e6" : "#7b00e6";
+  button.style.color = liked ? "rgba(123, 0, 230, 0)" : "rgba(123, 0, 230, 0)";
 }
 
 document.getElementById("like-button").addEventListener("click", () => {
